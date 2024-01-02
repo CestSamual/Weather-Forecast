@@ -8,7 +8,9 @@ var tempEl = document.getElementById("temperature");
 var humidEl = document.getElementById("humidity");
 var windEl = document.getElementById("wind");
 var forecastEl = document.getElementById("5dayHeading");
-
+let history = JSON.parse(localStorage.getItem("search")) || [];
+var historyEl = document.getElementById("history");
+var clearHistory = document.getElementById("clearHistory");
 
 var APIkey = "c1dd9d02e955f85934394531eb29b9cd";
 //Weather data collection function
@@ -96,7 +98,37 @@ function collectToday(cityName) {
 searchButtonEl.addEventListener("click", function () {
   var citySearch = cityEl.value;
   collectToday(citySearch);
+  history.push(citySearch);
+  localStorage.setItem("search", JSON.stringify(history));
+  historyRender();
 });
+//function to generate the search history elements
+function historyRender() {
+  historyEl.innerHTML = "";
+  for (let i = 0; i < history.length; i++) {
+    const historyDetail = document.createElement("input");
+    historyDetail.setAttribute("type", "text");
+    historyDetail.setAttribute("readonly", true);
+    historyDetail.setAttribute("class", "form-control d-block bg-white");
+    historyDetail.setAttribute("value", history[i]);
+    historyDetail.addEventListener("click", function () {
+      collectToday(historyDetail.value);
+    });
+    historyEl.append(historyDetail);
+  }
+}
+//clear history button functionality
+clearHistory.addEventListener("click", function () {
+  localStorage.clear();
+  history = [];
+  historyRender();
+});
+
+historyRender();
+if (history.length > 0) {
+  collectToday(history[history.length - 1]);
+}
+
 //Kelvin to celcius conversion function
 function kelvinConvert(K) {
   return Math.floor(K - 273.15);
