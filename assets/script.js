@@ -16,7 +16,7 @@ var APIkey = "c1dd9d02e955f85934394531eb29b9cd";
 //Weather data collection function
 function collectToday(cityName) {
   var queryURL =
-    "http://api.openweathermap.org/data/2.5/weather?q=" +
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
     cityName +
     "&appid=" +
     APIkey;
